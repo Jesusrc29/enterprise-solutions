@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    show-sql: false
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.flywaydb: INFO
+    com.jesusromero.enterprise.employee: INFO

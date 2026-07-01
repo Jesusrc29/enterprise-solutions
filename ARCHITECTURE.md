@@ -190,12 +190,12 @@ Se eligio una arquitectura orientada al dominio porque ofrece mejores propiedade
 
 ## 8. Stack tecnico propuesto
 
-Stack inicial para `employee-management-api`:
+Stack objetivo para `employee-management-api`:
 
 - Java 21
 - Spring Boot 3.5.x
 - Maven
-- PostgreSQL
+- Oracle Database Express Edition (Oracle XE)
 - Spring Data JPA
 - Flyway
 - Spring Security 6
@@ -322,6 +322,8 @@ Reglas:
 - las entidades no deben conducir cambios de esquema de forma implicita en flujos productivos
 
 Se eligio `Spring Data JPA` por pragmatismo y productividad, pero la arquitectura aisla persistencia dentro de `infrastructure`, permitiendo cambiar estrategia de acceso a datos en el futuro si el contexto lo exige.
+
+La implementacion inicial utilizara Oracle XE como motor oficial del proyecto. Aun asi, la configuracion y la organizacion de la capa de persistencia deben permanecer preparadas para soportar otros motores en fases futuras, especialmente PostgreSQL y SQL Server.
 
 ## 15. Direccion de performance y cache
 

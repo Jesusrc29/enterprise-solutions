@@ -53,22 +53,22 @@ Usar Maven como estandar de build y gestion de dependencias.
 
 El monorepo queda con una base de build convencional, legible y facil de escalar.
 
-## ADR-004: Usar PostgreSQL como base de datos relacional principal
+## ADR-004: Usar Oracle XE como base de datos relacional inicial
 
 ### Decision
 
-Usar PostgreSQL como motor relacional principal.
+Usar Oracle Database Express Edition (Oracle XE) como motor relacional inicial del proyecto.
 
 ### Motivo
 
-- es robusto, maduro y probado en produccion
-- ofrece excelente soporte SQL
-- evita dependencia de motores propietarios
-- se integra muy bien con Spring y Flyway
+- permite iniciar el proyecto con un motor enterprise ampliamente usado en entornos corporativos
+- encaja con escenarios reales de backend empresarial y modernizacion
+- es compatible con Spring Data JPA, Hibernate y Flyway
+- puede ejecutarse localmente de forma reproducible mediante Docker
 
 ### Consecuencia
 
-La plataforma adopta una base de datos enterprise, moderna y portable.
+La plataforma adopta Oracle XE como baseline inicial, pero la arquitectura debe conservar la capacidad de evolucionar hacia PostgreSQL o SQL Server sin reestructuraciones innecesarias.
 
 ## ADR-005: Usar Flyway para migraciones
 
