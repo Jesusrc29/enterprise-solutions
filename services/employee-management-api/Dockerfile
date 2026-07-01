@@ -11,7 +11,7 @@ RUN mvn -pl services/employee-management-api -am clean package -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-COPY --from=build /workspace/services/employee-management-api/target/employee-management-api-0.1.0-SNAPSHOT.jar app.jar
+COPY --from=build /workspace/services/employee-management-api/target/employee-management-api.jar app.jar
 
 EXPOSE 8080
 
