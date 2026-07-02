@@ -16,6 +16,7 @@ En la fase actual el proyecto incluye:
 - Actuator
 - autenticacion basica stateless con JWT
 - seed inicial de roles y usuario administrador
+- dominio funcional inicial de empleados
 
 ## 2. Requisitos
 
@@ -132,13 +133,56 @@ Respuesta esperada:
 Tomar el valor de `accessToken` y enviarlo asi:
 
 ```bash
-curl http://localhost:8080/some-protected-endpoint \
+curl http://localhost:8080/api/v1/employees \
   -H "Authorization: Bearer <access-token>"
 ```
 
 Swagger tambien queda preparado para usar autenticacion Bearer.
 
-## 11. Ejecucion local sin Docker para la API
+## 11. Endpoints de employees
+
+Todos los endpoints de `employees` requieren JWT valido.
+
+- `POST /api/v1/employees`
+- `GET /api/v1/employees/{id}`
+- `GET /api/v1/employees?page=0&size=10`
+- `PUT /api/v1/employees/{id}`
+- `PATCH /api/v1/employees/{id}/deactivate`
+
+### 11.1 Ejemplo de creacion
+
+```bash
+curl -X POST http://localhost:8080/api/v1/employees \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <access-token>" \
+  -d "{
+    \"documentType\": \"DNI\",
+    \"documentNumber\": \"12345678\",
+    \"firstName\": \"John\",
+    \"lastName\": \"Doe\",
+    \"email\": \"john.doe@example.com\",
+    \"phone\": \"999888777\",
+    \"jobTitle\": \"Backend Engineer\",
+    \"department\": \"Technology\",
+    \"hireDate\": \"2026-07-02\"
+  }"
+```
+
+### 11.2 Ejemplo de listado paginado
+
+```bash
+curl "http://localhost:8080/api/v1/employees?page=0&size=10" \
+  -H "Authorization: Bearer <access-token>"
+```
+
+### 11.3 Ejemplo de desactivacion
+
+```bash
+curl -X PATCH http://localhost:8080/api/v1/employees/1/deactivate \
+  -H "Authorization: Bearer <access-token>"
+```
+
+## 12. Ejecucion local sin Docker para la API
 
 Si Oracle ya se encuentra ejecutandose localmente o por Docker, la API puede iniciarse desde Maven:
 
@@ -147,7 +191,7 @@ mvn clean package
 mvn -pl services/employee-management-api spring-boot:run
 ```
 
-## 12. Verificaciones esperadas
+## 13. Verificaciones esperadas
 
 Una vez iniciado el entorno:
 
@@ -157,21 +201,22 @@ Una vez iniciado el entorno:
 - OpenAPI debe estar accesible
 - Actuator debe estar accesible
 - el endpoint de login debe responder con JWT
+- los endpoints de employees deben responder solo con token valido
 
 Rutas esperadas por defecto:
 
 - OpenAPI UI: `http://localhost:8080/swagger-ui.html`
 - Actuator Health: `http://localhost:8080/actuator/health`
 - Login: `POST http://localhost:8080/api/v1/auth/login`
+- Employees: `http://localhost:8080/api/v1/employees`
 
-## 13. Alcance actual
+## 14. Alcance actual
 
 Esta fase no implementa aun:
 
-- modulo `employees`
 - vacaciones
 - asistencia
 - CRUDs genericos
 - modulos funcionales fuera del alcance de autenticacion
 
-El objetivo de esta fase es dejar la autenticacion base lista y validada antes de avanzar a dominios funcionales.
+El objetivo actual es dejar autenticacion y el primer dominio funcional real listos antes de avanzar a otros dominios del monorepo.
