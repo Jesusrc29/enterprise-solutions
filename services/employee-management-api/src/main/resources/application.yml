@@ -3,10 +3,6 @@ spring:
     name: employee-management-api
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-      - org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:XEPDB1}
@@ -57,3 +53,9 @@ info:
     name: employee-management-api
     description: Spring Boot bootstrap service for enterprise-solutions
     version: 0.1.0-SNAPSHOT
+
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:change-this-jwt-secret-with-at-least-32-characters}
+      expiration-seconds: ${JWT_EXPIRATION_SECONDS:3600}

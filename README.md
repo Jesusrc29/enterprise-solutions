@@ -4,17 +4,18 @@
 
 `enterprise-solutions` es un monorepo backend orientado a portafolio con enfoque enterprise. Su objetivo es reflejar una base realista para un sistema que podria crecer durante varios anos, con estandares de arquitectura, mantenibilidad y escalabilidad desde el inicio.
 
-En esta primera fase se implementa unicamente el bootstrap tecnico del proyecto:
+En la fase actual el proyecto incluye:
 
 - estructura Maven del monorepo
 - modulo `employee-management-api`
 - configuracion base de Spring Boot
 - perfiles de entorno
 - integracion con Oracle XE mediante Docker Compose
-- Flyway inicial
+- Flyway con bootstrap tecnico y migraciones de seguridad
 - OpenAPI
 - Actuator
-- estructura completa de paquetes sin logica funcional
+- autenticacion basica stateless con JWT
+- seed inicial de roles y usuario administrador
 
 ## 2. Requisitos
 
@@ -79,6 +80,8 @@ Variables principales:
 - `ORACLE_PASSWORD`
 - `APP_USER`
 - `APP_USER_PASSWORD`
+- `JWT_SECRET`
+- `JWT_EXPIRATION_SECONDS`
 
 ## 7. Ejecucion local con Docker
 
@@ -97,7 +100,45 @@ Esto debe levantar:
 - Oracle XE
 - `employee-management-api`
 
-## 8. Ejecucion local sin Docker para la API
+## 8. Credenciales iniciales
+
+Credenciales iniciales del usuario administrador:
+
+- username: `admin`
+- password: `admin123`
+
+## 9. Como probar login
+
+Ejemplo de request:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d "{\"username\":\"admin\",\"password\":\"admin123\"}"
+```
+
+Respuesta esperada:
+
+```json
+{
+  "accessToken": "jwt-token",
+  "tokenType": "Bearer",
+  "expiresIn": 3600
+}
+```
+
+## 10. Como usar el token Bearer
+
+Tomar el valor de `accessToken` y enviarlo asi:
+
+```bash
+curl http://localhost:8080/some-protected-endpoint \
+  -H "Authorization: Bearer <access-token>"
+```
+
+Swagger tambien queda preparado para usar autenticacion Bearer.
+
+## 11. Ejecucion local sin Docker para la API
 
 Si Oracle ya se encuentra ejecutandose localmente o por Docker, la API puede iniciarse desde Maven:
 
@@ -106,31 +147,31 @@ mvn clean package
 mvn -pl services/employee-management-api spring-boot:run
 ```
 
-## 9. Verificaciones esperadas
+## 12. Verificaciones esperadas
 
 Una vez iniciado el entorno:
 
 - la API debe iniciar correctamente
 - Oracle XE debe quedar disponible
-- Flyway debe ejecutar la migracion inicial
+- Flyway debe ejecutar las migraciones iniciales
 - OpenAPI debe estar accesible
 - Actuator debe estar accesible
+- el endpoint de login debe responder con JWT
 
 Rutas esperadas por defecto:
 
 - OpenAPI UI: `http://localhost:8080/swagger-ui.html`
 - Actuator Health: `http://localhost:8080/actuator/health`
+- Login: `POST http://localhost:8080/api/v1/auth/login`
 
-## 10. Alcance de la fase actual
+## 13. Alcance actual
 
-Esta fase no implementa:
+Esta fase no implementa aun:
 
-- entidades funcionales
-- controllers funcionales
-- services funcionales
-- repositories funcionales
-- JWT
-- autenticacion
-- casos de uso de negocio
+- modulo `employees`
+- vacaciones
+- asistencia
+- CRUDs genericos
+- modulos funcionales fuera del alcance de autenticacion
 
-Su objetivo es dejar una base tecnica limpia, compilable y verificable antes de entrar a implementacion funcional.
+El objetivo de esta fase es dejar la autenticacion base lista y validada antes de avanzar a dominios funcionales.
