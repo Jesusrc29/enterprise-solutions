@@ -2,7 +2,7 @@
 
 ## 1. Descripcion
 
-`enterprise-solutions` es un monorepo backend orientado a portafolio con enfoque enterprise. Su objetivo es reflejar una base realista para un sistema que podria crecer durante varios anos, con estandares de arquitectura, mantenibilidad y escalabilidad desde el inicio.
+`enterprise-solutions` es un monorepo backend orientado a portafolio con enfoque enterprise. Su objetivo es reflejar una base realista para un sistema que podria crecer durante varios años, con estandares de arquitectura, mantenibilidad y escalabilidad desde el inicio.
 
 En la fase actual el proyecto incluye:
 

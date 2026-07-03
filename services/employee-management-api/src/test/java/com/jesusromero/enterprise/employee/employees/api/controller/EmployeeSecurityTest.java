@@ -6,22 +6,25 @@ import com.jesusromero.enterprise.employee.security.CustomUserDetailsService;
 import com.jesusromero.enterprise.employee.security.JwtAuthenticationFilter;
 import com.jesusromero.enterprise.employee.security.JwtService;
 import com.jesusromero.enterprise.employee.security.RestAuthenticationEntryPoint;
+import com.jesusromero.enterprise.employee.security.SecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(EmployeeController.class)
+@WebMvcTest(
+        value = EmployeeController.class,
+        excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class
+)
 @AutoConfigureMockMvc
-@Import(RestAuthenticationEntryPoint.class)
+@Import({SecurityConfig.class, RestAuthenticationEntryPoint.class, JwtAuthenticationFilter.class})
 class EmployeeSecurityTest {
 
     @Autowired
@@ -34,19 +37,10 @@ class EmployeeSecurityTest {
     private EmployeeApiMapper employeeApiMapper;
 
     @MockitoBean
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @MockitoBean
     private CustomUserDetailsService customUserDetailsService;
 
     @MockitoBean
     private JwtService jwtService;
-
-    @MockitoBean
-    private AuthenticationManager authenticationManager;
-
-    @MockitoBean
-    private PasswordEncoder passwordEncoder;
 
     @Test
     void shouldReturnUnauthorizedWhenTokenIsMissing() throws Exception {

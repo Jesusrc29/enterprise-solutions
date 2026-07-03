@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jesusromero.enterprise.employee.auth.api.dto.LoginRequest;
 import com.jesusromero.enterprise.employee.auth.application.service.AuthApplicationService;
 import com.jesusromero.enterprise.employee.auth.domain.model.AccessToken;
-import com.jesusromero.enterprise.employee.security.CustomUserDetailsService;
 import com.jesusromero.enterprise.employee.security.JwtAuthenticationFilter;
 import com.jesusromero.enterprise.employee.shared.exception.GlobalExceptionHandler;
 import com.jesusromero.enterprise.employee.shared.exception.UnauthorizedException;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -23,7 +23,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(
+        value = AuthController.class,
+        excludeAutoConfiguration = UserDetailsServiceAutoConfiguration.class
+)
 @AutoConfigureMockMvc(addFilters = false)
 @Import(GlobalExceptionHandler.class)
 class AuthControllerTest {
@@ -39,9 +42,6 @@ class AuthControllerTest {
 
     @MockitoBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @MockitoBean
-    private CustomUserDetailsService customUserDetailsService;
 
     @Test
     void shouldLoginSuccessfully() throws Exception {
