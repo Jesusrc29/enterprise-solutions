@@ -148,6 +148,14 @@ Todos los endpoints de `employees` requieren JWT valido.
 - `GET /api/v1/employees?page=0&size=10`
 - `PUT /api/v1/employees/{id}`
 - `PATCH /api/v1/employees/{id}/deactivate`
+- `GET /api/v1/users`
+- `GET /api/v1/users/{id}`
+- `POST /api/v1/users`
+- `PATCH /api/v1/users/{id}/disable`
+- `PATCH /api/v1/users/{id}/enable`
+- `PUT /api/v1/users/{id}/roles`
+- `GET /api/v1/roles`
+- `GET /api/v1/roles/{id}`
 
 ### 11.1 Ejemplo de creacion
 
@@ -182,7 +190,57 @@ curl -X PATCH http://localhost:8080/api/v1/employees/1/deactivate \
   -H "Authorization: Bearer <access-token>"
 ```
 
-## 12. Ejecucion local sin Docker para la API
+## 12. Endpoints de users
+
+Todos los endpoints de `users` requieren JWT valido.
+
+- `GET /api/v1/users`
+- `GET /api/v1/users/{id}`
+- `POST /api/v1/users`
+- `PATCH /api/v1/users/{id}/disable`
+- `PATCH /api/v1/users/{id}/enable`
+- `PUT /api/v1/users/{id}/roles`
+
+### 12.1 Ejemplo de creacion
+
+```bash
+curl -X POST http://localhost:8080/api/v1/users \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <access-token>" \
+  -d "{
+    \"username\": \"jsmith\",
+    \"email\": \"jsmith@example.com\",
+    \"password\": \"ChangeMe123\",
+    \"roles\": [\"EMPLOYEE\"]
+  }"
+```
+
+### 12.2 Ejemplo de asignacion de roles
+
+```bash
+curl -X PUT http://localhost:8080/api/v1/users/2/roles \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <access-token>" \
+  -d "{
+    \"roles\": [\"ADMIN\", \"EMPLOYEE\"]
+  }"
+```
+
+## 13. Endpoints de roles
+
+Todos los endpoints de `roles` requieren JWT valido.
+
+- `GET /api/v1/roles`
+- `GET /api/v1/roles/{id}`
+
+### 13.1 Ejemplo de listado
+
+```bash
+curl http://localhost:8080/api/v1/roles \
+  -H "Authorization: Bearer <access-token>"
+```
+
+## 14. Ejecucion local sin Docker para la API
 
 Si Oracle ya se encuentra ejecutandose localmente o por Docker, la API puede iniciarse desde Maven:
 
@@ -191,7 +249,7 @@ mvn clean package
 mvn -pl services/employee-management-api spring-boot:run
 ```
 
-## 13. Verificaciones esperadas
+## 15. Verificaciones esperadas
 
 Una vez iniciado el entorno:
 
@@ -202,6 +260,8 @@ Una vez iniciado el entorno:
 - Actuator debe estar accesible
 - el endpoint de login debe responder con JWT
 - los endpoints de employees deben responder solo con token valido
+- los endpoints de users deben responder solo con token valido
+- los endpoints de roles deben responder solo con token valido
 
 Rutas esperadas por defecto:
 
@@ -209,8 +269,10 @@ Rutas esperadas por defecto:
 - Actuator Health: `http://localhost:8080/actuator/health`
 - Login: `POST http://localhost:8080/api/v1/auth/login`
 - Employees: `http://localhost:8080/api/v1/employees`
+- Users: `http://localhost:8080/api/v1/users`
+- Roles: `http://localhost:8080/api/v1/roles`
 
-## 14. Alcance actual
+## 16. Alcance actual
 
 Esta fase no implementa aun:
 

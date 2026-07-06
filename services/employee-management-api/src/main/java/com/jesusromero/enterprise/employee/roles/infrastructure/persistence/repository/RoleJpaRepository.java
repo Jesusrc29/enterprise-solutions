@@ -3,9 +3,13 @@ package com.jesusromero.enterprise.employee.roles.infrastructure.persistence.rep
 import com.jesusromero.enterprise.employee.roles.infrastructure.persistence.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface RoleJpaRepository extends JpaRepository<RoleEntity, Long> {
 
     Optional<RoleEntity> findByName(String name);
+
+    List<RoleEntity> findByNameIn(Collection<String> names);
 }

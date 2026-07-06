@@ -1,6 +1,7 @@
 package com.jesusromero.enterprise.employee;
 
 import com.jesusromero.enterprise.employee.employees.infrastructure.persistence.repository.EmployeeJpaRepository;
+import com.jesusromero.enterprise.employee.roles.infrastructure.persistence.repository.RoleJpaRepository;
 import com.jesusromero.enterprise.employee.users.infrastructure.persistence.repository.UserJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ class ArchitectureSmokeTest {
 
     @MockitoBean
     private EmployeeJpaRepository employeeJpaRepository;
+
+    @MockitoBean
+    private RoleJpaRepository roleJpaRepository;
 
     @Test
     void contextLoads() {
