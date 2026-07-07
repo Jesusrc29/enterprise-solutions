@@ -97,6 +97,28 @@ class UserApplicationServiceTest {
     }
 
     @Test
+    void shouldRejectDuplicateEmail() {
+        User existingUser = new User(
+                5L,
+                "existing-user",
+                "jsmith@example.com",
+                "encoded-password",
+                true,
+                Set.of(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        when(userRepository.findByUsername("jsmith")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("jsmith@example.com")).thenReturn(Optional.of(existingUser));
+
+        assertThatThrownBy(() -> userApplicationService.createUser(
+                new CreateUserCommand("jsmith", "jsmith@example.com", "ChangeMe123", Set.of("EMPLOYEE"))
+        )).isInstanceOf(DuplicateUserException.class)
+                .hasMessage("User already exists with email jsmith@example.com");
+    }
+
+    @Test
     void shouldListUsers() {
         Page<User> usersPage = new PageImpl<>(Set.of(
                 new User(
